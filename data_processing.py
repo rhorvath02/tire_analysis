@@ -1,83 +1,86 @@
-import scipy.io as sio
-import numpy as np
 import pandas as pd
-import data_helpers
+import numpy as np
+import process_functions
 
-def main():
-    # Normal load sweeps
-    L1 = np.array([-50, -100, -150, -200, -250]) / 0.224809
-    L2 = np.array([-50, -100, -150, -250, -350]) / 0.224809
-    L3 = np.array([-350, -150, -250, -50]) / 0.224809
-    L4 = np.array([-50, -100, -150, -200, -250]) / 0.224809
-    L6 = np.array([-50, -150, -200, -250]) / 0.224809
-    L7 = np.array([-50, -150, -250, -350]) / 0.224809
+###########################################################
+# General conditions for fitting
+###########################################################
 
-    # Camber sweeps
-    l1 = np.array([0, 2, 4])
+sweeps = ["FZ", "V", "P", "SA", "IA"]
 
-    # velocity sweeps
-    V1 = np.array([0, 25, 2]) * 1.60934
-    V3 = np.array([15, 25, 45]) * 1.60934
-    
-    # pressure sweep
-    P = np.array([8, 10, 12, 14]) * 6.89476 # includes P1r and P2r
-    
-    # slip angle sweep (for long/combined data)
-    S1 = np.array([-1, 1, 6])
-    S4 = np.array([0, -3, -6])
+# Normal loads
+L1 = [x / 0.224809 for x in [-50, -100, -150, -200, -250]]
+L3 = [x / 0.224809 for x in [-50, -150, -250, -350]]
 
-    def create_sweep_dict(normal_load, camber, pressure, velocity, slip_angle = None):
-        if slip_angle is not None:
-            return {"load" : {"sweep" : normal_load, "label" : "FZ" },
-                    "camber" : {"sweep" : camber, "label" : "IA"},
-                    "pressure" : {"sweep" : pressure, "label" : "P"},
-                    "velocity" : {"sweep" : velocity, "label" : "V"},
-                    "slip" : {"sweep" : slip_angle, "label" : "SA"}}
-        else:
-            return {"load" : {"sweep" : normal_load, "label" : "FZ" },
-                    "camber" : {"sweep" : camber, "label" : "IA"},
-                    "pressure" : {"sweep" : pressure, "label" : "P"},
-                    "velocity" : {"sweep" : velocity, "label" : "V"}}
-    
+
+# Pressures
+P = [x * 6.89476 for x in [8, 10, 12, 14]] 
+
+
+# Velocity
+V_25 = [x * 1.60934 for x in [25]] 
+V1 = [x * 1.60934 for x in [0, 25, 2]]
+V3 = [x * 1.60934 for x in [25, 15, 45]]
+
+
+# Slip angles
+S1 = [0, -3, -6]
+
+# Inclination angle
+l1 = [0, 2, 4]
+
+
+###########################################################
+# Raw import and file initialization
+###########################################################
+
+# Open and process file
+raw_file = open("tire_data/raw_data/Round9/B2356raw72.dat")
+
+imported_data = raw_file.readlines()
+
+titles = imported_data[1].split()
+df_setup = dict()
+
+for title in titles:
+    df_setup[title] = []
+
+
+###########################################################
+# Data processing
+###########################################################
+def import_data(FZ, P, V, SA, IA):
+    for line in [line.split() for line in imported_data[3:]]:
+        modified_line = [float(x) for x in line]
+        i = -1
+        for point in modified_line:
+            i += 1
+
+            if titles[i] == "FZ":
+                df_setup[titles[i]] += [process_functions.nearest(FZ, point)]
+
+            elif titles[i] == "P":
+                df_setup[titles[i]] += [process_functions.nearest(P, point)]
+
+            elif titles[i] == "V":
+                df_setup[titles[i]] += [process_functions.nearest(V, point)]
+            
+            elif titles[i] == "SA":
+                df_setup[titles[i]] += [process_functions.nearest(SA, point)]
+            
+            # elif titles[i] == "IA":
+            #     df_setup[titles[i]] += [process_functions.nearest(IA, point)]
+            
+            else:
+                df_setup[titles[i]] += [point]
+
+
+    df = pd.DataFrame(df_setup)
+
     output_directory = "tire_data/processed_data/"
 
-    data_map = {"cornering_test": {"file_path" : "tire_data/raw_data/Round9/B2356raw2.mat", 
-                                                            "sweeps" : create_sweep_dict(L1, l1, P, V1, S1), "avg": True},
-                "braking_test": {"file_path" : "tire_data/raw_data/Round9/B2356raw50.mat", 
-                                                            "sweeps" : create_sweep_dict(L1, l1, P, V1, S1), "avg": True}
-                }
-    
-    for output_name, data_info in data_map.items():
-        # load matlab file and convert to pandas df
-        ## NOTEE - if multiple sweeps call the same matlab file, this can cause this to stop working, dont do that
-        df = data_helpers.import_data(sio.loadmat(data_info["file_path"]), run_data = True)
+    df.to_csv(f'{output_directory}test_braking.csv')
 
-        # classify sweeps on data
-        for variable, info in data_info["sweeps"].items():
-            temp_nearest_func = lambda x: get_nearest_value(info["sweep"], x)
-            df[variable] = df[info["label"]].apply(temp_nearest_func)
+    print(f".csv written to {output_directory}")
 
-        # period of oscillation is ~ 10.5 data points, remove oscillation
-        # TODO: Use FFT to find oscillation period, and remove it
-        if data_info["avg"]:
-            for target_var in ["FY", "FX", "FZ"]:
-                df[target_var] = moving_average(df[target_var], 10)
-
-        # export data to CSV
-        df.to_csv(f'{output_directory}{output_name}.csv')
-    
-def get_nearest_value(possible_values, input_value):
-    closest_value, distance = None, 0
-    for value in possible_values:
-        test_dist = abs(value - input_value)
-        if not distance or test_dist < distance:
-            distance = test_dist
-            closest_value = value
-    return closest_value
-
-def moving_average(interval, window_size):
-    window = np.ones(int(window_size))/float(window_size)
-    return np.convolve(interval, window, 'same')
-
-if __name__ == "__main__":
-    main()
+import_data(L3, P, V_25, S1, l1)
