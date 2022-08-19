@@ -80,7 +80,7 @@ for i in range(2000):
     # print(predicted)
     # print(w_lst[i])
 
-plt.show
+plt.show()
 
 
 # model_x_data = np.linspace(min(x_lst), max(x_lst), 30)
