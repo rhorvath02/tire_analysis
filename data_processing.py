@@ -1,6 +1,4 @@
-import pandas as pd
 import scipy.io as sio
-import numpy as np
 import process_functions
 
 ###########################################################
@@ -10,7 +8,7 @@ import process_functions
 # Normal load
 L1 = [x / 0.224809 for x in [-50, -100, -150, -200, -250]]
 L2 = [x / 0.224809 for x in [-50, -100, -150, -250, -350]]
-L3 = [x / 0.224809 for x in [-50, -150, -250, -350]]
+L3 = [x / 0.224809 for x in [-50, -100, -150, -250, -350]]
 L4 = [x / 0.224809 for x in [-50, -100, -150, -200, -250]]
 
 L6 = [x / 0.224809 for x in [-50, -150, -200, -250]]
@@ -30,7 +28,7 @@ V3 = [x * 1.60934 for x in [25, 15, 45]]
 # Slip angle
 S1 = [0, -3, -6]
 S2 = [-4, 0, 4, 8, 12]
-
+S3 = [0, -3, -6]
 S4 = [0, -3, -6]
 
 # Inclination angle
@@ -58,17 +56,17 @@ def create_sweep_dict(normal_load, camber, pressure, velocity, slip_angle = None
                     "pressure" : {"sweep" : pressure, "label" : "P"},
                     "velocity" : {"sweep" : velocity, "label" : "V"}}
 
-data = {"cornering_placeholder": {"file_path" : "tire_data/raw_data/Round9/B2356raw31.mat", 
-                                                            "sweeps" : create_sweep_dict(L3, l1, P, V_25, S1), "avg": True},
+data = {"cornering_placeholder": {"file_path" : "tire_data/raw_data/Round9/B2356run31.mat", 
+                                                            "sweeps" : create_sweep_dict(L1, l1, P, V_25), "avg": True},
         
-        "braking_placeholder": {"file_path" : "tire_data/raw_data/Round9/B2356raw72.mat", 
-                                                            "sweeps" : create_sweep_dict(L2, l3, P_12, V_25, S2), "avg": True},
+        "braking_placeholder": {"file_path" : "tire_data/raw_data/Round9/B2356run72.mat", 
+                                                            "sweeps" : create_sweep_dict(L3, l1, P, V_25, S3)},
 
         "cornering_hoosier_r25b_18x7-5_10x7_run1": {"file_path" : "tire_data/raw_data/Round9/B1654run21.mat", 
                                                             "sweeps" : create_sweep_dict(L4, l2, P, V1), "avg": True},
 
         "braking_hoosier_r25b_18x7-5_10x7_run1": {"file_path" : "tire_data/raw_data/Round9/B1654run35.mat",
-                                                            "sweeps" : create_sweep_dict(L6, l2, P, V1, S4), "avg" : False}}
+                                                            "sweeps" : create_sweep_dict(L6, l2, P, V1, S4)}}
         
 
 ###########################################################
@@ -85,10 +83,10 @@ for output_name, data_info in data.items():
             temp_nearest_func = lambda x: process_functions.nearest_value(info["sweep"], x)
             df[variable] = df[info["label"]].apply(temp_nearest_func)
 
-        # # Remove oscillation
-        # if data_info["avg"]:
-        #     for target_var in ["FY", "FX", "FZ"]:
-        #         df[target_var] = process_functions.nearest_value(df[target_var], 10)
+        # Remove oscillation
+        if data_info["avg"]:
+            for target_var in ["FY", "FX", "FZ"]:
+                df[target_var] = process_functions.nearest_value(df[target_var], 10)
 
 
         # export data to csv
