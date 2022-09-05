@@ -41,10 +41,10 @@ l2 = [0, 2, 4]
 
 # {"TIRE_NAME": ["FILE NAME", [CONDITIONS]]}
 
-files = {"braking_hoosier_r25b_18x7-5_10x8": ["B1654run38.dat", [L6, P, V_25, S4, l2]],
-        "cornering_hoosier_r25b_18x7-5_10x8": ["B1654run24.dat", [L4, P, V_25, S2, l2]]}
+files = {"cornering_hoosier_r25b_16x7-5_10x8": ["B2356run8.dat", [L1, P, V_25, S1, l1]]}
+        # , "cornering_hoosier_r25b_18x7-5_10x8": ["B1654run24.dat", [L4, P, V_25, S2, l2]]}
 
-input_location = "tire_data/raw_data/Round6/"
+input_location = "tire_data/raw_data/Round9/"
 
 ###########################################################
 # Raw import and file initialization
