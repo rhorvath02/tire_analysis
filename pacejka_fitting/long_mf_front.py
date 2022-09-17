@@ -37,7 +37,6 @@ for name, tire in tires.items():
     try:
         df = pd.read_csv(f"./tire_data/processed_data/braking_{name}.csv")
         tire["long"] = df[(df["pressure"] == pressure) & (df["velocity"] == velocity)]
-        # print(tire["long"])
         
     except:
         print("Error getting long data for {0}".format(name))
@@ -45,7 +44,6 @@ for name, tire in tires.items():
     try:
         df = pd.read_csv(f"./tire_data/processed_data/cornering_{name}.csv")
         tire["lat"] = df[(df["velocity"] == velocity) & (df["pressure"] == pressure)]
-        # print(tire["lat"])
 
     except:
         print("Error getting lateral data for {0}".format(name))
