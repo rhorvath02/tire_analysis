@@ -25,7 +25,7 @@ def fit(data, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13):
 
     return (D * np.sin(C * np.arctan(Bx1 - E * (Bx1 - np.arctan(Bx1)))) + V)
 
-tires = {"hoosier_r25b_18x7-5_10x8":{"long":None, "lat":None}}
+tires = {"hoosier_r25b_16x7-5_10x8":{"long":None, "lat":None}}
 
 camber = 0 # default camber
 pressure = 12 * 6.89476 # default pressure
@@ -48,18 +48,18 @@ for name, tire in tires.items():
     except:
         print("Error getting lateral data for {0}".format(name))
 
-df = tires["hoosier_r25b_18x7-5_10x8"]["long"]
-x_lst = [x for x in df["FZ"].tolist()]
-y_lst = [x * 100 for x in df["SR"].tolist()]
-z_lst = df["FX"].tolist()
+df = tires["hoosier_r25b_16x7-5_10x8"]["long"]
+x_lst = [x for x in df["load"].tolist()[:200]]
+y_lst = [x * 100 for x in df["SL"].tolist()[:200]]
+z_lst = df["FX"].tolist()[:200]
 
 a_vals = [1.8, 840, 5000, 400, 700, -0.5, 0, 0, 0, -2, 0, 0, 0, 0]
 a_vals2 = [1.65, -5000, 2000, 400, 700, 0.7, 0, 0, -3, 0, 0, 0, 0, 0]
 hand_fit = [1.8, 200, 3000, -400, 700, -0.5, 0, 0, 0, -2, 2, 0, 0, 0]
-optimal = [ 8.43000601e-01,  1.95979747e+02,  3.00080094e+03, -4.01069202e+02,
-        7.00940702e+02, -7.09365546e-01,  2.05271682e+00, -1.89172501e+00,
-       -7.11416172e-01, -1.16640886e+00,  2.99405455e+00,  2.16709629e+00,
-       -1.31915722e+00,  8.22994474e-01]
+optimal = [ 7.71232592e-01,  1.92991249e+02,  3.00174562e+03, -4.03001928e+02,
+        7.02111410e+02, -4.91557578e-01,  2.22331740e+00, -1.97729069e+00,
+       -4.01687409e+00, -2.66867903e+00,  3.36620374e+00,  2.04444808e+00,
+       -1.26277882e+00,  3.53205263e-01]
 # labels = [b0 , b1 , b2  ,  b3 , b4 ,  b5, b6,b7,b8, b9,b10,b11,b12,b13]
 
 # parameters, covariance = curve_fit(fit, [x_lst, y_lst], z_lst, hand_fit, maxfev = 10000, bounds = ((1.65, 500, 1000, 0, 0, -2, -100, -0.00001, -0.00001, -1000, -1000, -5000, -5000, -0.00001), (2, 4000, 10000, 1000, 1500, 3, 100, 0, 0, 1000, 1000, 5000, 5000, 0)))
@@ -92,7 +92,7 @@ ax.set_zlabel('Longitudinal Force (N)')
 
 def accuracy(coeffs):
     ia_count = 0
-    for i in range(500):
+    for i in range(200):
         predicted = fit([x_lst[i], y_lst[i]], *coeffs)
 
         error = (z_lst[i] - predicted) / predicted * 100
@@ -100,12 +100,12 @@ def accuracy(coeffs):
         if abs(error) >= 10:
             ia_count += 1
         
-    print(((1.000001 - ia_count / 500) * 100))
+    print(((1.000001 - ia_count / 200) * 100))
 
-    return ((1.000001 - ia_count / 500) * 100)**-1
+    return ((1.000001 - ia_count / 200) * 100)**-1
 
-# params = basinhopping(accuracy, optimal)
-# print(params)
+params = basinhopping(accuracy, optimal)
+print(params)
 
 accuracy(optimal)
 
