@@ -2,7 +2,7 @@ import scipy.io as sio
 import process_functions
 
 ###########################################################
-# All inputs
+# All Inputs
 ###########################################################
 
 # Normal load
@@ -70,7 +70,7 @@ data = {"cornering_placeholder": {"file_path" : "tire_data/raw_data/Round9/B2356
         
 
 ###########################################################
-# Data processing
+# Data Processing
 ###########################################################
 
 for output_name, data_info in data.items():
