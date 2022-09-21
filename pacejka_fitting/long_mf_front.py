@@ -36,7 +36,7 @@ run_num = 1
 for name, tire in tires.items():
     try:
         df = pd.read_csv(f"./tire_data/processed_data/braking_{name}.csv")
-        tire["long"] = df[(df["pressure"] == pressure) & (df["velocity"] == velocity)]
+        tire["long"] = df[(df["pressure"] == pressure) & (df["velocity"] == velocity) & (df["slip"] == slip_angle) & (df["camber"] == 0)]
         
     except:
         print("Error getting long data for {0}".format(name))
