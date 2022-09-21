@@ -44,7 +44,7 @@ B2 = [-0.15 -0.10, -0.05, 0, 0.05, 0.10, 0.15]
 
 # {"TIRE_NAME": ["FILE NAME", [CONDITIONS]]}
 
-files = {"braking_hoosier_r25b_18x7-5_10x7": ["B1654run35.dat", [L6, P, V_25, S4, l2]]}
+files = {"braking_hoosier_r25b_18x7-5_10x7": ["B1654run35.dat", [L6, P, V_25, S4, l2, B2]]}
         # , "cornering_hoosier_r25b_18x7-5_10x8": ["B1654run24.dat", [L4, P, V_25, S2, l2]]}
 
 input_location = "tire_data/raw_data/Round6/"
@@ -61,7 +61,7 @@ def import_data():
         imported_data = raw_file.readlines()
 
         titles = imported_data[1].split()
-        titles += ["load", "pressure", "velocity", "slip", "camber"]
+        titles += ["load", "pressure", "velocity", "slip_a", "camber", "slip_r"]
         df_setup = dict()
 
         for title in titles:
@@ -88,10 +88,13 @@ def import_data():
                     df_setup["velocity"] += [process_functions.nearest_value(conditions[1][2], point)]
                 
                 elif titles[i] == "SA":
-                    df_setup["slip"] += [process_functions.nearest_value(conditions[1][3], point)]
+                    df_setup["slip_a"] += [process_functions.nearest_value(conditions[1][3], point)]
                 
                 elif titles[i] == "IA":
                     df_setup["camber"] += [process_functions.nearest_value(conditions[1][4], point)]
+                        
+                elif titles[i] == "SL":
+                    df_setup["slip_r"] += [process_functions.nearest_value(conditions[1][5], point)]
                 
                 df_setup[titles[i]] += [point]
 
