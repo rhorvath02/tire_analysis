@@ -41,6 +41,7 @@ def long_fit(data, b0, b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11, b12, b13, I
     Bx1 = B * (SR + H)
 
     return (D * np.sin(C * np.arctan(Bx1 - E * (Bx1 - np.arctan(Bx1)))) + V) * (abs(IA) * IA_coeff_mult + IA_coeff_shift)
+    # return (D * np.sin(C * np.arctan(Bx1 - E * (Bx1 - np.arctan(Bx1)))) + V) * (IA_coeff_shift)
 
 
 tires = {"hoosier_r25b_18x7-5_10x7":{"long":None, "lat":None}}
@@ -68,7 +69,7 @@ for name, tire in tires.items():
     except:
         print("Error getting lateral data for {0}".format(name))
 
-optimal = [0.46024966176377113, 4000.509873697152, 1097.1712081460967, 202.18848632159495, 100.8812198037175, -0.2557010431649166, 0.3066955241461764, 0.011822770671297778, -1.9521015799737094, 0, 0, 0, 0, 0, 1000, 1]
+optimal = [1.3571135239191252, 3998.0757558330024, 1095.5835797046432, 202.935818795577, 101.54938053084916, -1.3762680734885866, 0.6914821434535963, 0.6541272302480233, -2.6376935777444563, -0.05951378056275003, -0.3325720747894694, -0.18496215814885364, 0.6096946534271963, 0.036868448500835704, 0.8942606021158418, -0.2359963405707327]
 
 df = tires[list(tires.keys())[0]]["long"]
 x_lst = df["FZ"].tolist()
@@ -105,7 +106,7 @@ X, Y = np.meshgrid(model_x_data, model_y_data)
 fig = plt.figure()
 ax = Axes3D(fig, auto_add_to_figure=False)
 
-W = long_fit([X, Y, 0], *params)
+W = long_fit([X, Y, 1], *params)
 
 ax = plt.axes(projection='3d')
 
