@@ -1,0 +1,1 @@
+['Hoosier 18.0 x 6.0 - 10 R25B', 'Hoosier 6.0 / 18.0 - 10 LCO', 'Hoosier 43100 18.0x6.0-10 R20', 'Goodyear D0571 18.0x6.5-10', 'MRF 18x6.0-10 ZTD1']

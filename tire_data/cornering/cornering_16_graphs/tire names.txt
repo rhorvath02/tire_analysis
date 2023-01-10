@@ -1,1 +1,0 @@
-['Avon 7.0/16.0-10', 'Hoosier 43075 16x7.5-10 R25B', '10 Hoosier 43070 16x6.0-10 R25B', 'Hoosier 43070 16x6.0-10 R25B', 'Hoosier 43075 16x7.5-10 LCO', 'Hoosier 43070 16x6.0-10 LCO', 'Hoosier 43075 16x7.5-10 R20', 'Hoosier 43070 16x6.0-10 R20']
