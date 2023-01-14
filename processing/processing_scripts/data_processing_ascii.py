@@ -23,7 +23,7 @@ V_dict = {"V_25": [x * 1.60934 for x in [25]], "V1": [x * 1.60934 for x in [0, 2
 
 
 # Slip angles
-SA_dict = {"S1": [-1, 1, 6], "S2": [-12, -8, -4, 0, 4, 8, 12], "S3": [0, -3, -6], "S4": [0, -3, -6]}
+SA_dict = {"S_cont": np.arange(-12, 13, 1), "S1": [-1, 1, 6], "S2": [-12, -8, -4, 0, 4, 8, 12], "S3": [0, -3, -6], "S4": [0, -3, -6]}
 
 
 # Inclination angle
@@ -47,11 +47,9 @@ def import_files(file_df):
     for i in range(len(file_df)):
         current_row = file_df.iloc[i]
 
-        print(current_row)
-
         tire_dict[current_row["tire_name"]] = [current_row["data_file_name"], [L_dict[current_row["FZ"]], 
         P_dict[current_row["P"]], V_dict[current_row["V"]], SA_dict[current_row["SA"]], IA_dict[current_row["IA"]], 
-        SR_dict[current_row["SR"]]]]
+        SR_dict[current_row["SR"]]], current_row["corner/brake"]]
 
     return tire_dict
 
@@ -107,6 +105,6 @@ def import_data(prepared_files):
 
         output_directory = "./results/"
 
-        df.to_csv(f'{output_directory}{tire}.csv')
+        df.to_csv(f'{output_directory}{conditions[2]}_{tire}.csv')
 
-        print(f".csv written to {output_directory}{tire}")
+        print(f".csv written to {output_directory}{conditions[2]}_{tire}")
