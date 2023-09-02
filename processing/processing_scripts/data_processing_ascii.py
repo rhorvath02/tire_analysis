@@ -6,32 +6,55 @@ from processing_scripts import process_functions
 # General Conditions for Processing
 ###########################################################
 
-input_location = "./data/"
-
 # Normal loads
-L_dict = {"L_Continuous": [x / 0.224809 for x in np.arange(-500, 0, 1)], "L1": [x / 0.224809 for x in [-50, -100, -150, -200, -250]],
-"L3": [x / 0.224809 for x in [-50, -150, -250, -350]], "L4": [x / 0.224809 for x in [-50, -100, -150, -200, -250]], 
-"L6": [x / 0.224809 for x in [-50, -150, -200, -250]]}
+L_dict = {
+    "L_Continuous": [x / 0.224809 for x in np.arange(-500, 0, 1)], 
+    "L1": [x / 0.224809 for x in [-50, -100, -150, -200, -250, -350]],
+    "L2": [x / 0.224809 for x in [-50, -100, -150, -200, -250, -350]],
+    "L3": [x / 0.224809 for x in [-50, -100, -150, -250, -350]], 
+    "L4": [x / 0.224809 for x in [-50, -100, -150, -200, -250]], 
+    "L6": [x / 0.224809 for x in [-50, -150, -200, -250]]
+    }
 
 
 # Pressures
-P_dict = {"P": [x * 6.89476 for x in [8, 10, 12, 14]]}
+P_dict = {
+    "P": [x * 6.89476 for x in [8, 10, 12, 14]]
+    }
 
 
 # Velocity
-V_dict = {"V_25": [x * 1.60934 for x in [25]], "V1": [x * 1.60934 for x in [0, 25, 2]], "V3": [x * 1.60934 for x in [25, 15, 45]]}
+V_dict = {
+    "V_25": [x * 1.60934 for x in [25]], 
+    "V1": [x * 1.60934 for x in [0, 25, 2]], 
+    "V3": [x * 1.60934 for x in [25, 15, 45]]
+    }
 
 
 # Slip angles
-SA_dict = {"S_cont": np.arange(-12, 13, 1), "S1": [-1, 1, 6], "S2": [-12, -8, -4, 0, 4, 8, 12], "S3": [0, -3, -6], "S4": [0, -3, -6]}
+SA_dict = {
+    "S_cont": np.arange(-12, 13, 1), 
+    "S1": [-1, 1, 6], 
+    "S2": np.arange(-12, 13, 1), 
+    "S3": [0, -3, -6], 
+    "S4": [0, -3, -6]
+    }
 
 
 # Inclination angle
-IA_dict = {"I1": [0, 2, 4], "I2": [0, 2, 4]}
+IA_dict = {
+    "I1": [0, 2, 4],
+    "I2": [-4, -3, -2, -1, 0, 1, 2, 3, 4],
+    "I3": [-4, 0, 2, 4]
+    }
 
 
 # Slip ratio
-SR_dict = {"B2": [-0.15 -0.10, -0.05, 0, 0.05, 0.10, 0.15], "const": [-1]}
+SR_dict = {
+    "const": [-1],
+    "B2": [-0.15 -0.10, -0.05, 0, 0.05, 0.10, 0.15],
+    "B3": [-0.15 -0.10, -0.05, 0, 0.05, 0.10, 0.15]
+    }
 
 
 ###########################################################
@@ -47,7 +70,7 @@ def import_files(file_df):
     for i in range(len(file_df)):
         current_row = file_df.iloc[i]
 
-        tire_dict[current_row["tire_name"]] = [current_row["data_file_name"], [L_dict[current_row["FZ"]], 
+        tire_dict[current_row["tire_name"]] = [current_row["file_location"], current_row["data_file_name"], [L_dict[current_row["FZ"]], 
         P_dict[current_row["P"]], V_dict[current_row["V"]], SA_dict[current_row["SA"]], IA_dict[current_row["IA"]], 
         SR_dict[current_row["SR"]]], current_row["corner/brake"]]
 
@@ -60,7 +83,8 @@ def import_files(file_df):
 def import_data(prepared_files):
     for tire, conditions in prepared_files.items():
         # Open and process file
-        raw_file = open(f"{input_location}{conditions[0]}.dat")
+
+        raw_file = open(f"./{conditions[0]}{conditions[1]}.dat")
 
         imported_data = raw_file.readlines()
 
@@ -82,22 +106,22 @@ def import_data(prepared_files):
                 i += 1
 
                 if titles[i] == "FZ":
-                    df_setup["load"] += [process_functions.nearest_value(conditions[1][0], point)]
+                    df_setup["load"] += [process_functions.nearest_value(conditions[2][0], point)]
 
                 elif titles[i] == "P":
-                    df_setup["pressure"] += [process_functions.nearest_value(conditions[1][1], point)]
+                    df_setup["pressure"] += [process_functions.nearest_value(conditions[2][1], point)]
 
                 elif titles[i] == "V":
-                    df_setup["velocity"] += [process_functions.nearest_value(conditions[1][2], point)]
+                    df_setup["velocity"] += [process_functions.nearest_value(conditions[2][2], point)]
                 
                 elif titles[i] == "SA":
-                    df_setup["slip"] += [process_functions.nearest_value(conditions[1][3], point)]
+                    df_setup["slip"] += [process_functions.nearest_value(conditions[2][3], point)]
                 
                 elif titles[i] == "IA":
-                    df_setup["camber"] += [process_functions.nearest_value(conditions[1][4], point)]
+                    df_setup["camber"] += [process_functions.nearest_value(conditions[2][4], point)]
                 
                 elif titles[i] == "SR":
-                    df_setup["slip_ratio"] += [process_functions.nearest_value(conditions[1][5], point)]
+                    df_setup["slip_ratio"] += [process_functions.nearest_value(conditions[2][5], point)]
                 
                 df_setup[titles[i]] += [point]
 
@@ -105,6 +129,6 @@ def import_data(prepared_files):
 
         output_directory = "./results/"
 
-        df.to_csv(f'{output_directory}{conditions[2]}_{tire}.csv')
+        df.to_csv(f'{output_directory}{conditions[3]}_{tire}.csv')
 
-        print(f".csv written to {output_directory}{conditions[2]}_{tire}")
+        print(f".csv written to {output_directory}{conditions[3]}_{tire}")
