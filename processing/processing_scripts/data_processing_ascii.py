@@ -70,7 +70,7 @@ def import_files(file_df):
     for i in range(len(file_df)):
         current_row = file_df.iloc[i]
 
-        tire_dict[current_row["tire_name"]] = [current_row["file_location"], current_row["data_file_name"], [L_dict[current_row["FZ"]], 
+        tire_dict[f'{current_row["tire_name"]}_{current_row["corner/brake"]}'] = [current_row["file_location"], current_row["data_file_name"], [L_dict[current_row["FZ"]], 
         P_dict[current_row["P"]], V_dict[current_row["V"]], SA_dict[current_row["SA"]], IA_dict[current_row["IA"]], 
         SR_dict[current_row["SR"]]], current_row["corner/brake"]]
 
@@ -129,6 +129,6 @@ def import_data(prepared_files):
 
         output_directory = "./results/"
 
-        df.to_csv(f'{output_directory}{conditions[3]}_{tire}.csv')
+        df.to_csv(f'{output_directory}{tire}.csv')
 
         print(f".csv written to {output_directory}{conditions[3]}_{tire}")

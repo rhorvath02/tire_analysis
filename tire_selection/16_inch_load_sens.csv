@@ -1,9 +1,9 @@
-Tire Name,Mu vs FZ Metric
-cornering_Hoosier_16x7.5-10_R20_8,0.12576618
-cornering_Hoosier_16x7.5-10_R20_7,0.183764162
-cornering_Hoosier_16x7.5-10_LCO_8,0.186555941
-cornering_Hoosier_16x6.0-10_LCO_6,0.217576383
-cornering_Hoosier_16x7.5-10_LCO_7,0.259922522
-cornering_Hoosier_16x6.0-10_R20_6,0.297867268
-cornering_Hoosier_16x6.0-10_R20_7,0.324836946
-cornering_Hoosier_16x6.0-10_LCO_7,0.372660399
+,Tire,abs(slope) * 1000
+0,cornering_Hoosier_16x6.0-10_LCO_6,0.21757638275476054
+1,cornering_Hoosier_16x6.0-10_LCO_7,0.3726603989121924
+2,cornering_Hoosier_16x6.0-10_R20_6,0.2978672679017169
+3,cornering_Hoosier_16x6.0-10_R20_7,0.32483694601143753
+4,cornering_Hoosier_16x7.5-10_LCO_7,0.2599225217717849
+5,cornering_Hoosier_16x7.5-10_LCO_8,0.18655594070904336
+6,cornering_Hoosier_16x7.5-10_R20_7,0.18376416157183328
+7,cornering_Hoosier_16x7.5-10_R20_8,0.12576617978072524
