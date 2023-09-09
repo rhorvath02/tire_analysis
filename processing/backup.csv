@@ -1,4 +1,4 @@
-﻿tire_name,file_location,data_file_name,FZ,P,V,SA,IA,SR,corner/brake
+tire_name,file_location,data_file_name,FZ,P,V,SA,IA,SR,corner/brake
 Hoosier_18x6.0-10_R20_6,data/round_9/cornering_ascii_si/,B2356run28,L1,P,V_25,S1,I1,const,cornering
 Hoosier_18x6.0-10_R20_7,data/round_9/cornering_ascii_si/,B2356run31,L1,P,V_25,S1,I1,const,cornering
 Hoosier_18x6.0-10_LCO_6,data/round_6/10_cornering_ascii_si/,B1654run31,L4,P,V3,S2,I2,const,cornering
