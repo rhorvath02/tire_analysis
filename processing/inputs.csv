@@ -23,3 +23,7 @@ Worn_Hoosier_16x6.0-10_R20_6,data/round_9/cornering_ascii_si/,B2356run12,L1,P,V3
 Worn_Hoosier_16x6.0-10_R20_7,data/round_9/cornering_ascii_si/,B2356run15,L1,P,V3,S2,I2,const,cornering
 Worn_Hoosier_16x7.5-10_R20_7,data/round_9/cornering_ascii_si/,B2356run6,L1,P,V3,S2,I2,const,cornering
 Worn_Hoosier_16x7.5-10_R20_8,data/round_9/cornering_ascii_si/,B2356run9,L1,P,V3,S2,I2,const,cornering
+Hoosier_18x7.5-10_R25B_7,data/round_6/10_cornering_ascii_si/,B1654run21,L4,P,V_25,S2,I2,const,cornering
+Worn_Hoosier_18x7.5-10_R25B_7,data/round_6/10_cornering_ascii_si/,B1654run22,L4,P,V3,S2,I2,const,cornering
+Hoosier_18x7.5-10_R25B_8,data/round_6/10_cornering_ascii_si/,B1654run24,L4,P,V_25,S2,I2,const,cornering
+Worn_Hoosier_18x7.5-10_R25B_8,data/round_6/10_cornering_ascii_si/,B1654run25,L4,P,V3,S2,I2,const,cornering
